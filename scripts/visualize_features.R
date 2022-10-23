@@ -22,9 +22,6 @@ diab_test_data <- diab_projection %>% filter(!train)
 diab_test_data$diabetes_binary_p <- predict(glm_model, newdata=diab_test_data, type="response")
 
 #visualize PCs
-#ggplot(data=tibble(x=1:length(PC1_comps), y=PC1_comps), aes(x,y)) + geom_line()
-#ggplot(data=tibble(x=names(diab_test_data %>% select(-Diabetes_binary, -PC1, -PC2, -PC3, -diabetes_binary_p)), y=PC1_comps), aes(x,y)) + geom_line()
-ggplot(data=tibble(x=names(diab_test_data %>% select(-Diabetes_binary, -PC1, -PC2, -PC3, -diabetes_binary_p)),y=PC2_comps), aes(x,y)) + geom_point()+scale_x_discrete()
 
 PC1_comps <- pca_results$rotation %>% as_tibble() %>% pull(PC1)
 ggplot(data=tibble(x=1:length(PC1_comps), y=PC1_comps), aes(x,y)) + geom_line()
