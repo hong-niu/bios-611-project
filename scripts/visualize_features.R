@@ -22,15 +22,28 @@ diab_test_data <- diab_projection %>% filter(!train)
 diab_test_data$diabetes_binary_p <- predict(glm_model, newdata=diab_test_data, type="response")
 
 #visualize PCs
+#ggplot(data=tibble(x=1:length(PC1_comps), y=PC1_comps), aes(x,y)) + geom_line()
+#ggplot(data=tibble(x=names(diab_test_data %>% select(-Diabetes_binary, -PC1, -PC2, -PC3, -diabetes_binary_p)), y=PC1_comps), aes(x,y)) + geom_line()
+ggplot(data=tibble(x=names(diab_test_data %>% select(-Diabetes_binary, -PC1, -PC2, -PC3, -diabetes_binary_p)),y=PC2_comps), aes(x,y)) + geom_point()+scale_x_discrete()
+
 PC1_comps <- pca_results$rotation %>% as_tibble() %>% pull(PC1)
 ggplot(data=tibble(x=1:length(PC1_comps), y=PC1_comps), aes(x,y)) + geom_line()
-
 PC2_comps <- pca_results$rotation %>% as_tibble() %>% pull(PC2)
 ggplot(data=tibble(x=1:length(PC2_comps), y=PC2_comps), aes(x,y)) + geom_line()
-
 PC3_comps <- pca_results$rotation %>% as_tibble() %>% pull(PC3)
 ggplot(data=tibble(x=1:length(PC3_comps), y=PC3_comps), aes(x,y)) + geom_line()
 
+PC1_thresholded <- which(PC1_comps > 0.01)
+PC2_thresholded <- which(PC2_comps > 0.01)
+PC3_thresholded <- which(PC3_comps > 0.01)
+
+PC1_cats <- names(diab_test_data[PC1_thresholded+1])
+PC2_cats <- names(diab_test_data[PC2_thresholded+1])
+PC3_cats <- names(diab_test_data[PC3_thresholded+1])
+
+ggplot(data=tibble(x=PC1_cats,y=PC1_comps[PC1_thresholded]), aes(x,y)) + geom_point()+scale_x_discrete()
+ggplot(data=tibble(x=PC2_cats,y=PC2_comps[PC2_thresholded]), aes(x,y)) + geom_point()+scale_x_discrete()
+ggplot(data=tibble(x=PC3_cats,y=PC3_comps[PC3_thresholded]), aes(x,y)) + geom_point()+scale_x_discrete()
 
 #gbm
 library(gbm)
