@@ -1,12 +1,16 @@
 BIOS-611-Project
 ===================
 
+Useful commands:
 
+- docker build . -t 611-proj   
+- docker run -v "$(pwd)":/home/rstudio/work -e PASSWORD=55 -p 8787:8787 -it 611-proj
 
+- goto localhost:8787 / user: rstudio / pass: 55
 
+Dataset: 
 
-
-
+https://www.kaggle.com/code/alexteboul/diabetes-health-indicators-dataset-notebook/notebook
 
 
 ----------
