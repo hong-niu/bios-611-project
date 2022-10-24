@@ -3,7 +3,7 @@ BIOS-611-Project-Midterm
 
 # Instructions:
 
-After cloning the repo, the dataset can be installed from: https://www.kaggle.com/code/alexteboul/diabetes-health-indicators-dataset-notebook/notebook. The three .csv files should be moved into the "source_data" directly. Then the docker container can be built with: 
+After cloning the repo, the dataset can be installed from: https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset. The three .csv files should be moved into the "source_data" directly. Then the docker container can be built with: 
 
 - docker build . -t 611-proj   
 
