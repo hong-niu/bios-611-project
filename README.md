@@ -1,16 +1,25 @@
-BIOS-611-Project
+BIOS-611-Project-Midterm
 ===================
 
-Useful commands:
+#Instructions:
+
+After cloning the repo, the dataset can be installed from: https://www.kaggle.com/code/alexteboul/diabetes-health-indicators-dataset-notebook/notebook. The three .csv files should be moved into the "source_data" directly. Then the docker container can be built with: 
 
 - docker build . -t 611-proj   
+
+Then Rstudio can be invoked with 
+
 - docker run -v "$(pwd)":/home/rstudio/work -e PASSWORD=55 -p 8787:8787 -it 611-proj
 
-- goto localhost:8787 / user: rstudio / pass: 55
+In any browser, enter: 
 
-Dataset: 
+- localhost:8787
 
-https://www.kaggle.com/code/alexteboul/diabetes-health-indicators-dataset-notebook/notebook
+with username: rstudio and password: 55 (or whatever password one chooses to set). Finally, in order to be able to make the final writeup, tinytex must be manually installed in Rstudio by going to the console and entering 
+
+- tinytex::install_tinytex()
+
+The final writeup can be made by using make. 
 
 
 ----------
