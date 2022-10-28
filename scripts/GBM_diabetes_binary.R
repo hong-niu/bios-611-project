@@ -1,4 +1,4 @@
-setwd("~/work")
+#setwd("~/work")
 library(tidyverse) 
 diabetes_data <- read_csv("./source_data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
 

@@ -9,11 +9,13 @@ clean:
 	rm -rf derived_data
 	rm -rf .created-dirs #add this for any directories that are created through src code 
 	rm -f Rplots.pdf
-	rm -f WriteUp-Midterm.pdf
-	rm -f WriteUp-Midterm.log
-	rm -f WriteUp-Midterm.synctex.gz
-	rm -f WriteUp-Midterm.aux
-	
+	rm -f Writeup-Midterm.pdf
+	rm -f Writeup-Midterm.log
+	rm -f Writeup-Midterm.synctex.gz
+	rm -f Writeup-Midterm.aux
+	rm -f Writeup-rmd.log
+	rm -f Writeup-rmd.pdf
+	rm -f Writeup-rmd.tex
 .created-dirs: 
 	mkdir -p models
 	mkdir -p figures
@@ -54,5 +56,24 @@ all: derived_data/diabetes_binary_GBM_prediction.csv \
 		derived_data/diabetes_binary_PCA-GLM_prediction.csv
 		
 # Generate final report 
-WriteUp-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
-	pdflatex WriteUp-Midterm.tex
+Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
+	pdflatex Writeup-Midterm.tex
+
+Writeup-Rmd.pdf: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd
+	Rscript --no-restore --no-save -e  "rmarkdown::render('Writeup-rmd.Rmd', output_format='pdf_document')"
+
+Writeup-Rmd.html: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd 
+	Rscript --no-restore --no-save -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
+
+
+
+## build html 
+## can convert pandoc to convert html -> pdf 
+#example.html: a b c 
+ #Rscript -e "rmarkdown::render('doc.Rmd',output_format='pdf_document');"
+
+#example.html: a b c 
+# Rscript -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
+
+
+
