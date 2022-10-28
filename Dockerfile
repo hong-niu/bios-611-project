@@ -12,7 +12,7 @@ RUN Rscript --no-restore --no-save -e "install.packages('markdown')"
 RUN Rscript --no-restore --no-save -e "install.packages('mime')"
 RUN Rscript --no-restore --no-save -e "update.packages(ask = FALSE);"
 
-# Set tinytex installation path (actual installation done outside of Docker build) 
+# Set tinytex installation path (actual installation in Rstudio after Dockerbuild) 
 ENV PATH=/home/rstudio/.TinyTeX:/home/rstudio/.TinyTeX/bin/aarch64-linux:${PATH}
 
 # attempt to install tinytex - unsuccesful 
