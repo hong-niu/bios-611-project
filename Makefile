@@ -16,6 +16,9 @@ clean:
 	rm -f Writeup-rmd.log
 	rm -f Writeup-rmd.pdf
 	rm -f Writeup-rmd.tex
+	rm -f scripts/.Rhistory
+	rm -f .Rhistory
+	rm -f scripts/texput.log
 
 	
 .created-dirs: 
