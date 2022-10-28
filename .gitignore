@@ -1,0 +1,19 @@
+# ignore all .log and .aux files
+*.log
+*.aux
+
+# ignore figures, models, and derived data
+derived_data/
+figures/
+models/
+.created-dirs
+
+# ignore the some PDFs
+Writeup-Midterm.pdf
+Rplots.pdf
+
+# ignore source data for now 
+source_data/diabetes_012_health_indicators_BRFSS2015.csv
+source_data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv
+source_data/diabetes_binary_health_indicators_BRFSS2015.csv
+
