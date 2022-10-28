@@ -76,8 +76,6 @@ Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
 #Writeup-Rmd.html: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd 
 #	Rscript --no-restore --no-save -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
 
-
-
 ## build html 
 ## can convert pandoc to convert html -> pdf 
 #example.html: a b c 
