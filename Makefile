@@ -16,6 +16,8 @@ clean:
 	rm -f Writeup-rmd.log
 	rm -f Writeup-rmd.pdf
 	rm -f Writeup-rmd.tex
+
+	
 .created-dirs: 
 	mkdir -p models
 	mkdir -p figures
@@ -59,11 +61,17 @@ all: derived_data/diabetes_binary_GBM_prediction.csv \
 Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
 	pdflatex Writeup-Midterm.tex
 
-Writeup-Rmd.pdf: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd
-	Rscript --no-restore --no-save -e  "rmarkdown::render('Writeup-rmd.Rmd', output_format='pdf_document')"
 
-Writeup-Rmd.html: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd 
-	Rscript --no-restore --no-save -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
+
+
+### Old attempts at building report - leave in for now 
+
+
+#Writeup-Rmd.pdf: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd
+#	Rscript --no-restore --no-save -e  "rmarkdown::render('Writeup-rmd.Rmd', output_format='pdf_document')"
+
+#Writeup-Rmd.html: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd 
+#	Rscript --no-restore --no-save -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
 
 
 
