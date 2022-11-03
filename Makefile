@@ -16,6 +16,8 @@ clean:
 	rm -f Writeup-rmd.log
 	rm -f Writeup-rmd.pdf
 	rm -f Writeup-rmd.tex
+	rm -f Writeup-rmd.html
+
 	rm -f scripts/.Rhistory
 	rm -f .Rhistory
 	rm -f scripts/texput.log
@@ -64,6 +66,8 @@ all: derived_data/diabetes_binary_GBM_prediction.csv \
 Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
 	pdflatex Writeup-Midterm.tex
 
+Writeup-rmd.html: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd 
+	Rscript --no-restore --no-save -e  "rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
 
 
 
@@ -83,6 +87,8 @@ Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
 
 #example.html: a b c 
 # Rscript -e "tinytex::install_tinytex(force=TRUE); rmarkdown::render('Writeup-rmd.Rmd', output_format='html_document')"
+#example.html: a b c 
+ #Rscript -e "rmarkdown::render('doc.Rmd',output_format='pdf_document');"
 
 
 

@@ -1,0 +1,16 @@
+---
+title: "Writeup-RMD-version"
+output: pdf_document
+date: "2022-10-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![test](figures/PC1_comp_analysis.png)
+![test](figures/PC2_comp_analysis.png)
+![test](figures/PC3_comp_analysis.png)
+![test](figures/PC1_comp_full-spectrum.png)
+![test](figures/PC2_comp_full-spectrum.png)
+![test](figures/PC3_comp_full-spectrum.png)

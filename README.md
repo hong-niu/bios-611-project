@@ -21,7 +21,7 @@ Then the docker container can be built with:
 
 - docker build . -t 611-proj   
 
-Then Rstudio can be invoked with 
+Then Rstudio can be invoked (while in the bios-611-project directory) with 
 
 - docker run -v "$(pwd)":/home/rstudio/work -e PASSWORD=55 -p 8787:8787 -it 611-proj
 
@@ -29,7 +29,18 @@ In any browser, enter:
 
 - localhost:8787
 
-with username: rstudio and password: 55 (or whatever password one chooses to set). Finally, in order to be able to make the final writeup, tinytex must be manually installed in Rstudio by going to the console and entering: 
+with username: rstudio and password: 55 (or whatever password one chooses to set).
+
+# Building the Final Report
+There are two ways to build the final report. To build an html version, one may call: 
+
+- make Writeup-rmd.html
+
+This should run out of the box, run the appropriate scripts, and generate the final html document. All auxiliary files including final report can be removed with
+
+- make clean
+
+Finally, in order to be able to make the final writeup as a tex file to PDF, tinytex must be manually installed in Rstudio by going to the console and entering: 
 
 - tinytex::install_tinytex(force=TRUE) (in the Rstudio console)
 
