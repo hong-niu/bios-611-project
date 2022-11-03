@@ -31,7 +31,7 @@ In any browser, enter:
 
 with username: rstudio and password: 55 (or whatever password one chooses to set).
 
-# Building the Final Report
+# Building the Final Report:
 There are two ways to build the final report. To build an html version, one may call: 
 
 - make Writeup-rmd.html
