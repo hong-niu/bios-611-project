@@ -1,0 +1,76 @@
+---
+title: | 
+  <center> Analysis of Diabetes Risk Factors </center>
+  <center> BIOS 611 </center>
+author: "Hong Niu"
+date: "2022-11-27"
+geometry: margin=1.25in
+output:
+  pdf_document:
+    number_sections: true
+  html_document:
+    df_print: paged
+ 
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\section{Introduction}
+
+As of 2018, 34.2 million Americans have diabetes, while 88 million are estimated to have prediabetes \cite{dataset}. According to the CDC, prediabetes is a health condition in which blood sugars are found to be higher than normal, but not yet categorized as type 2 diabetes. However, in addition to being a precursor to developing diabetes, prediabetes is also associated with an individual's risk of developing heart disease and stroke \cite{cdc-prediabetes}. Not only are these key reasons for being able to identify individuals who are prediabetic, but also according to the CDC, small reductions in weight (5-7% of body weight) or increases in regular physical activity (just 30 minutes a day) can significantly lower risk of developing type 2 diabetes for those who are overweight. As such, it is critical to be able to identify individuals at risk of prediabetes, as well as diabetes, in order to best manage these chronic conditions early through lifestyle changes and maximize one's chances at preventing the onset of diabetes.  
+
+In order to do so, I will be analyzing a diabetes health indicators dataset to determine which factors are most associated with diabetes or prediabetes. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. I'm interested in analyzing this relationship to try to identify any potential relationships between the 21 patient attributes and diabetes status.
+
+\subsection{Datasets} 
+
+In order to perform such studies, the data from this repository will be used: 
+
+  \begin{enumerate}
+      \item https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+  \end{enumerate}
+  
+This dataset is generated from the Behavioral Risk Factor Surveillance System (BRFSS), a health-related telephone survey collected by the CDC, measuring various factors related to diabetes status. The two main datasets of interest are a binary labeling of diabetic status (diabetes or prediabetes vs none) and one that separates diabetes into the three classes. For simplicity, the binary labeled dataset will first be considered. 
+
+\section{Data Analysis}  
+Three methods were used to analyze the data, PCA and adaboost (GBM in R). Rather than developing a specific classifier, the purpose for each of these methods is primarily to identify the key factors associated with risk of diabetes. Although, naturally a classifier was constructed in the GBM case whose accuracy was then considered. 
+
+\subsection{PCA}
+First, PCA was applied to all 21 features on the full set of data, in which it was found that the first 3 principal components accounted for 93% of the overall variance, accoutning for 52%, 21%, and 20% of the variance respectively. The first three components were then further analyzed to determine which features contributed most to these components. Below are the full distribution of coefficients for each principal component based on the original 21 features. 
+
+```{r PCA-Full-Comps, out.width="0.4\\linewidth", fig.show="hold", include=TRUE, fig.align="center", fig.cap=c("Distribution of PCA factors for PC1-PC3"), echo=FALSE}
+  knitr::include_graphics(c("./figures/PC1_comp_full-spectrum.png", "./figures/PC2_comp_full-spectrum.png", "./figures/PC3_comp_full-spectrum.png"))
+```
+
+Next, for each principal component, the largest positive and largest negative contributors for each component were separated out. 
+```{r PC1-Analysis, out.width="0.4\\linewidth", fig.show="hold", include=TRUE, fig.align="center", fig.cap=c("Highest Relative Influence Factors for each PC Factor"), echo=FALSE}
+  knitr::include_graphics(c("figures/PC1_comp_analysis.png", "figures/PC2_comp_analysis.png", "figures/PC3_comp_analysis.png")) 
+
+```
+From the above plots, it can be seen that the for PC1, the highest contributing features were Education (+_), Income and Physical Activity. For PC2, they were Age, BMI, General Health, High Blood Pressure, and Physical Health. For PC3, they were Age, Income, and Physical Health. 
+
+
+
+
+
+\subsection{GBM} 
+Next, the R package GBM was used to fit an adaboost classifier to the binary diabetes data. The data was split randomly into a 75%/25% training/test split. The top 6 highest influence features are reported below: 
+
+```{r GBM-Analysis, out.width="0.5\\linewidth", fig.show="hold", include=TRUE, fig.align="center", fig.cap=c("Highest Relative Influence for GBM"), echo=FALSE}
+  knitr::include_graphics(c("figures/GBM_Rel_Influence.png")) 
+```
+
+```{r GBM-ROC, out.width="0.5\\linewidth", fig.show="hold", include=TRUE, fig.align="center", fig.cap=c("ROC curve for binary GBM"), echo=FALSE}
+  knitr::include_graphics(c("figures/GBM_ROC.png")) 
+```
+
+```{r GBM-Confusion, out.width="200%", fig.show="hold", include=TRUE, fig.align="center", fig.cap=c("Summary of statistics for binary GBM"), echo=FALSE}
+  knitr::include_graphics(c("figures/GBM_confusion.png")) 
+```
+
+
+\pagebreak
+\begin{thebibliography}{9}
+    \bibitem{dataset} https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+    \bibitem{cdc-prediabetes} https://www.cdc.gov/diabetes/basics/prediabetes.html
+    \end{thebibliography}

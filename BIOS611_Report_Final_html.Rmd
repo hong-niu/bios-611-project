@@ -1,0 +1,217 @@
+---
+title: | 
+  <center> Analysis of Diabetes Risk Factors </center>
+  <center> BIOS-611 Final </center>
+author: | 
+  <center> Hong Niu </center>
+date: | 
+  <center> 2022-12-05 </center>
+output:
+  html_document:
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<style type="text/css">
+.main-container {
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 14px;
+  }
+td {  /* Table  */
+  font-size: 8px;
+}
+h1.title {
+  font-size: 38px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 28px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 22px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+}
+code.r{ /* Code block */
+    font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+
+# Introduction
+
+As of 2018, 34.2 million Americans have diabetes, while 88 million are estimated to have prediabetes \cite{dataset}. According to the CDC, prediabetes is a health condition in which blood sugars are found to be higher than normal, but not yet categorized as type 2 diabetes. However, in addition to being a precursor to developing diabetes, prediabetes is also associated with an individual's risk of developing heart disease and stroke \cite{cdc-prediabetes}. Not only are these key reasons for being able to identify individuals who are prediabetic, but also according to the CDC, small reductions in weight (5-7% of body weight) or increases in regular physical activity (just 30 minutes a day) can significantly lower risk of developing type 2 diabetes for those who are overweight. Also according to the CDC, being active makes one's body more sensitive to insulin, even for those patients already diagnosed with having type 2 diabetes. As such, it is critical to be able to identify individuals at risk of prediabetes and diabetes in order to best manage these chronic conditions early through lifestyle changes and maximize one's chances at preventing the onset of the disease. 
+
+## Datasets 
+In order to do so, I will be analyzing a diabetes health indicators dataset to determine which factors are most associated with diabetes or prediabetes. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. I'm interested in analyzing this relationship to try to identify any potential relationships between the 21 patient attributes and diabetes status. For this, the data from this repository will be used: 
+
+  - https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+
+This dataset is generated from the Behavioral Risk Factor Surveillance System (BRFSS), a health-related telephone survey collected by the CDC, measuring various factors related to diabetes status. The two main datasets of interest are a binary labeling of diabetic status (diabetes or prediabetes vs none) and one that separates diabetes into the three classes. For simplicity, the binary labeled dataset will first be considered. Below the first 6 classes (out of 21) are shown from the 50/50 binary dataset as an example. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+setwd("~/work")
+diabetes_data <- read_csv("./source_data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
+print(diabetes_data[0:6])
+
+```
+
+## Preprocessing 
+
+
+# Data Analysis & Results 
+Three methods were used to analyze the data, PCA and adaboost (GBM in R). Rather than developing a specific classifier, the purpose for each of these methods is primarily to identify the key factors associated with risk of diabetes. Although, naturally a classifier was constructed in the GBM case whose accuracy was then considered. 
+
+## PCA 
+First, PCA was applied to all 21 features on the full set of data, in which it was found that the first 3 principal components accounted for 93% of the overall variance, accoutning for 52%, 21%, and 20% of the variance respectively. The first three components were then further analyzed to determine which features contributed most to these components. Below are the full distribution of coefficients for each principal component based on the original 21 features.
+
+```{css, echo=FALSE}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+}
+figure {
+    display: inline-block;
+    border: 1px dotted gray;
+    margin: 20px; /* adjust as needed */
+}
+figure img {
+    vertical-align: top;
+}
+figure figcaption {
+    border: 1px dotted blue;
+    text-align: center;
+}
+```
+
+
+<figure>
+  <img src="./figures/PC1_comp_full-spectrum.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption>Distribution of PCA factors for PC1</figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/PC2_comp_full-spectrum.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption>Distribution of PCA factors for PC2</figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/PC3_comp_full-spectrum.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption>Distribution of PCA factors for PC3</figcaption>
+</figure>
+
+
+Next, for each principal component, the largest positive and largest negative contributors for each component were separated out. 
+
+<figure>
+  <img src="./figures/PC1_comp_analysis.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> Highest Relative Influence Factors for PC1 </figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/PC2_comp_analysis.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption>Highest Relative Influence Factors for PC2 </figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/PC3_comp_analysis.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> Highest Relative Influence Factors for PC3 </figcaption>
+</figure>
+
+From the above plots, it can be seen that the for PC1, the highest contributing features were Education (+), Income (+), Physical Activity (+), Mental Health (-), and Physical Health (-). For PC2, they were Age (+), BMI (+), General Health (+), High Blood Pressure (+), Physical Health (+), and Mental Health (-). For PC3, they were Age (+), Income (+), Physical Health (+), BMI (-), and Mental Health (-). In terms of the magnitude of the coefficients, we find that the largest influence comes from BMI (+/-), Mental Health (-) and Physical Health (+/-). 
+
+## PCA - GLM Classifier 
+After determining the features contributing the largest variance, a GLM classifier was fit to the first 3 principal components to see if these were sufficient to reproduce the diabetes status. The data was split randomly into a 75/25% training/test split. 
+
+<figure>
+  <img src="./figures/GLM-PCA_ROC.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> ROC curve for binary GBM </figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/GLM-PCA_confusion.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> Summary of statistics for binary GBM </figcaption>
+</figure>
+
+It was found that the area under the ROC curve was 0.713. 
+
+## GBM Classifier 
+From the PCA, we determined that the above features contributed to the majority of the variance of the dataset. We wanted to further evaluate the potential importance of these features by using the R package GBM used to fit an adaboost classifier to the binary diabetes data. The data was split randomly into a 75%/25% training/test split. The top 6 highest influence features are reported below: 
+
+<figure>
+  <img src="./figures/GBM_Rel_Influence.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> Highest Relative Influence for GBM </figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/GBM_ROC.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> ROC curve for binary GBM </figcaption>
+</figure>
+
+<figure>
+  <img src="./figures/GBM_confusion.png" alt="CAPTION" class = "center" 
+            width="600" 
+            />
+  <figcaption> Summary of statistics for binary GBM </figcaption>
+</figure>
+
+In this instance it was found that the area under the ROC curve was 0.8255. 
+
+# Discussion 
+
+
+
+
+## Future Direction 
+
+
+# Appendix
+Derived .csv files containing the classifier predictions are saved in the generated derived_data directory. This will be removed with running the make clean command. 
+
+
+# References
+
+  1. https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+  2. https://www.cdc.gov/diabetes/basics/prediabetes.html
+  3. https://www.cdc.gov/diabetes/managing/active.html

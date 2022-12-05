@@ -1,13 +1,10 @@
 setwd("~/work")
 library(tidyverse) 
-diabetes_data <- read_csv("./source_data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
-#diabetes_data <- read_csv("diabetes_012_health_indicators_BRFSS2015.csv")
-
-set.seed(100)
+diabetes_data <- read_csv("./source_data/diabetes_012_health_indicators_BRFSS2015.csv")
+#as.factor(diabetes_data$Diabetes_012)
 
 #look at data 
 head(diabetes_data)
-#hist(diabetes_data$BMI)
 
 
 
@@ -31,7 +28,7 @@ rates <- function(actual, predicted) {
 ################################################
 #gbm
 library(gbm)
-f <- formula(sprintf("Diabetes_binary ~ %s", 
+f <- formula(sprintf("Diabetes_012 ~ %s", 
                      diabetes_data %>% select(HighBP:Income) %>% 
                        names() %>% paste(collapse=" + ")))
 train <- runif(nrow(diabetes_data)) < 0.75
@@ -40,31 +37,37 @@ diabetes_data_train <- diabetes_data %>% dplyr::filter(train) #%>% select(-train
 diabetes_data_test <- diabetes_data %>% dplyr::filter(!train) #%>% select(-train)
 
 #build model 
-#gbm_model <- gbm(f, data=diabetes_data %>% dplyr::filter(train))
-gbm_model <- gbm(f, data=diabetes_data_train)
+gbm_model <- gbm(f, data=diabetes_data_train, distribution="multinomial")
 summary_gbm <- summary(gbm_model)
-png(file="./figures/GBM_Rel_Influence.png")
+png(file="./figures/GBM_Rel_Influence_ternary.png")
 barplot(summary_gbm$rel.inf[1:6], horiz=TRUE, names.arg=c(summary_gbm$var[1:6]), col="blue", xlab="Relative Influence", main="GBM Summary")
 dev.off()
 summary_gbm
 
 #compute ROC 
 library(pROC)
-diabetes_data_test$diab_p <- predict(gbm_model, newdata=diabetes_data_test, type="response")
-roc_class <- roc(diabetes_data_test$Diabetes_binary, diabetes_data_test$diab_p)
+library(dplyr)
+library(tidyverse)
+#diabetes_data_test$diab_p <- predict(gbm_model, newdata=diabetes_data_test, type="response")
+test_pred_matrix <- predict(gbm_model, newdata=diabetes_data_test, type="response")
+temp <- test_pred_matrix %>% as.data.frame()
+colnames(temp) <- c("0", "1", "2")
+temp
+print(colnames(temp)[max.col(temp)])
+
+print(sum(diabetes_data_train$Diabetes_012==1))
+
+roc_class <- multiclass.roc(diabetes_data_test$Diabetes_012, diabetes_data_test$diab_p)
 roc_class$auc
-png(file="./figures/GBM_ROC.png")
+png(file="./figures/GBM_ternary_ROC.png")
 plot(roc_class)
 dev.off()
 
-test <- diabetes_data %>% filter(!train)
-test$Diabetes_binary_p <- predict(gbm_model, newdata=test)
-write.csv(test,"derived_data/diabetes_binary_GBM_prediction.csv", row.names = FALSE)
 
 # check ROC + confusion data 
 scores <- do.call(rbind, Map(function(threshold) { 
   predicted <- diabetes_data_test$diab_p > threshold;
-  actual <- diabetes_data_test$Diabetes_binary;
+  actual <- diabetes_data_test$Diabetes_012;
   rt <- rates(actual, predicted);
   tpc <- sum((predicted==actual)[actual==1]);
   fpc <- sum((predicted==1)[actual==0]);
@@ -82,7 +85,7 @@ scores <- pivot_longer(scores, cols=true_positive:f1)
 print(scores)
 
 ggplot(scores, aes(threshold, value)) + geom_line(aes(color=factor(name)))
-ggsave("./figures/GBM_confusion.png", width=1800, height=1200, units = "px")
+ggsave("./figures/GBM_confusion_ternary.png")
 
 
 

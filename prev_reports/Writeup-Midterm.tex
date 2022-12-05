@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+%\documentclass[12pt]{article}
+%\usepackage{setspace}
+%\doublespacing
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym} 
+%\usepackage{epsfig}
+\usepackage{graphicx}
+
+\title{BIOS-611-Final}
+\author{Hong Niu}
+\date{November 25, 2022}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+
+
+As of 2018, 34.2 million Americans have diabetes, while 88 million have prediabetes \cite{dataset}. 
+For this project, I will be looking at a diabetes health indicators dataset. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. I'm interested in analyzing this relationship to try to identify any potential relationships between the 21 patient attributes and diabetes status.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Datasets} 
+
+In order to perform such studies, the data from this repository will be used: 
+  \begin{enumerate}
+      \item https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+  \end{enumerate}
+This dataset is generated from the Behavioral Risk Factor Surveillance System (BRFSS), a health-related telephone survey collected by the CDC, measuring various factors related to diabetes status. The two main datasets of interest are a binary labeling of diabetic status (diabetes or prediabetes vs none) and one that separates diabetes into the three classes. 
+   
+   
+\section{PCA Analysis} 
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC1_comp_full-spectrum.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}
+
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC2_comp_full-spectrum.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}	
+
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC3_comp_full-spectrum.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}
+
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC1_comp_analysis.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}
+
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC2_comp_analysis.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}
+
+	\begin{figure}[ht]
+		\begin{center} 
+		\centering
+			\includegraphics[scale=0.4]{figures/PC3_comp_analysis.png}
+			\caption{abc}
+			\end{center}
+		\end{figure}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+
+\begin{thebibliography}{9}
+    \bibitem{dataset} https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
+    \end{thebibliography}
+    
+    
+\end{document}

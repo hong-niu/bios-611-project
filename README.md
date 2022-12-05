@@ -8,7 +8,7 @@ For my project, I will be looking at a diabetes health indicators dataset. This 
 
 # Instructions:
 
-* Note: all code and Docker files were compiled and set up on an M1 Apple Silicon device and was not tested on other system/hardware builds. 
+* Note: all code and Docker files were compiled and set up on an M1 Apple Silicon device and was not tested on other system/hardware builds. For those running on other architectures, the rocker/verse image may be used by modifying the Dockerfile, although this again has been untested. 
 
 
 After cloning the repo, the dataset can be installed from: https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset. The three .csv files should be moved into the "source_data" directly such that the files are listed as:
@@ -32,13 +32,16 @@ In any browser, enter:
 with username: rstudio and password: 55 (or whatever password one chooses to set).
 
 # Building the Final Report:
-There are two ways to build the final report. To build an html version, one may call: 
+Due to Latex issues with the M1 Mac docker image, the final report will be presented as an HTML document. To build the html version, one may call: 
 
-- make Writeup-rmd.html
+- make BIOS611_Report_Final_html.html
 
 This should run out of the box, run the appropriate scripts, and generate the final html document. All auxiliary files including final report can be removed with
 
 - make clean
+
+# Future Work 
+In the future, a Latex version of the report will be provided. The following instructions are from the midterm for the course, and has been outdated. 
 
 Finally, in order to be able to make the final writeup as a tex file to PDF, tinytex must be manually installed in Rstudio by going to the console and entering: 
 
@@ -62,7 +65,7 @@ Although the R_0 of monkeypox is widely considered to be far lower than that of 
 The datasets I'll be using are found at: 
 
 	https://www.kaggle.com/datasets/lihyalan/2020-corona-virus-timeseries
-    https://www.kaggle.com/datasets/deepcontractor/monkeypox-dataset-daily-updated
+  https://www.kaggle.com/datasets/deepcontractor/monkeypox-dataset-daily-updated
 
 which contain day by day and even hourly data on the spread of these diseases during their initial onsets. Using this data, I'm interested in seeing whether there exist any similarities in the geographic spread of both diseases despite their differences. 
 
