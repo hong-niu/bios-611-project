@@ -40,7 +40,7 @@ This should run out of the box, run the appropriate scripts, and generate the fi
 
 - make clean
 
-# Future Work 
+# Future Work [Issues with Latex]
 In the future, a Latex version of the report will be provided. The following instructions are from the midterm for the course, and has been outdated. 
 
 Finally, in order to be able to make the final writeup as a tex file to PDF, tinytex must be manually installed in Rstudio by going to the console and entering: 

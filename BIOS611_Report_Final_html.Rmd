@@ -58,31 +58,32 @@ pre { /* Code block - determines code spacing between lines */
 
 # Introduction
 
-As of 2018, 34.2 million Americans have diabetes, while 88 million are estimated to have prediabetes \cite{dataset}. According to the CDC, prediabetes is a health condition in which blood sugars are found to be higher than normal, but not yet categorized as type 2 diabetes. However, in addition to being a precursor to developing diabetes, prediabetes is also associated with an individual's risk of developing heart disease and stroke \cite{cdc-prediabetes}. Not only are these key reasons for being able to identify individuals who are prediabetic, but also according to the CDC, small reductions in weight (5-7% of body weight) or increases in regular physical activity (just 30 minutes a day) can significantly lower risk of developing type 2 diabetes for those who are overweight. Also according to the CDC, being active makes one's body more sensitive to insulin, even for those patients already diagnosed with having type 2 diabetes. As such, it is critical to be able to identify individuals at risk of prediabetes and diabetes in order to best manage these chronic conditions early through lifestyle changes and maximize one's chances at preventing the onset of the disease. 
+As of 2018, 34.2 million Americans have been diagnosed with diabetes, while 88 million are estimated to have prediabetes \cite{dataset}. According to the CDC, prediabetes is a health condition in which blood sugars are found to be higher than normal, but not yet categorized as type 2 diabetes. However, in addition to being a precursor to developing diabetes, prediabetes is also associated with an individual's risk of developing heart disease and stroke \cite{cdc-prediabetes}. Not only are these key reasons for being able to identify individuals who are prediabetic, but also according to the CDC, small reductions in weight (5-7% of body weight) or increases in regular physical activity (just 30 minutes a day) can significantly lower risk of developing type 2 diabetes for those who are overweight. Also according to the CDC, being active makes one's body more sensitive to insulin, even for those patients already diagnosed with having type 2 diabetes. As such, it is critical to be able to identify individuals at risk of prediabetes and diabetes in order to best manage these chronic conditions early through lifestyle changes and maximize one's chances at preventing the onset of disease. 
 
 ## Datasets 
-In order to do so, I will be analyzing a diabetes health indicators dataset to determine which factors are most associated with diabetes or prediabetes. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. I'm interested in analyzing this relationship to try to identify any potential relationships between the 21 patient attributes and diabetes status. For this, the data from this repository will be used: 
+In order to do so, I will be analyzing a diabetes health indicators dataset to determine which factors are most associated with diabetes or prediabetes. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. All features will be included to try to identify any potential relationships between the 21 patient attributes and diabetes status. For these goals, the data from this repository will be used: 
 
   - https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset
 
-This dataset is generated from the Behavioral Risk Factor Surveillance System (BRFSS), a health-related telephone survey collected by the CDC, measuring various factors related to diabetes status. The two main datasets of interest are a binary labeling of diabetic status (diabetes or prediabetes vs none) and one that separates diabetes into the three classes. For simplicity, the binary labeled dataset will first be considered. Below the first 6 classes (out of 21) are shown from the 50/50 binary dataset as an example. 
+This dataset is generated from the Behavioral Risk Factor Surveillance System (BRFSS), a health-related telephone survey collected by the CDC, measuring various factors related to diabetes status. The two main datasets of interest are a binary labeling of diabetic status (diabetes or prediabetes vs none) and one that separates diabetes into the three classes. For simplicity, the binary labeled dataset will be considered. In this dataset, diabetes status and group status is combined into one. Below the first 6 classes (out of 21) are shown from the 50/50 balanced binary dataset as an example. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 setwd("~/work")
 diabetes_data <- read_csv("./source_data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
 print(diabetes_data[0:6])
-
 ```
 
-## Preprocessing 
 
+## Preprocessing
+
+For purposes of this study, the 50/50 balanced binary dataset was used. The balance of classes between the patients made it ideal for fitting the classifiers. The data was also checked for any obvious incorrect values. 
 
 # Data Analysis & Results 
-Three methods were used to analyze the data, PCA and adaboost (GBM in R). Rather than developing a specific classifier, the purpose for each of these methods is primarily to identify the key factors associated with risk of diabetes. Although, naturally a classifier was constructed in the GBM case whose accuracy was then considered. 
+Two methods were used to analyze the data, PCA/Logistic Regression and adaboost (GBM in R). Rather than developing a specific classifier, the purpose for each of these methods is primarily to identify the key factors associated with risk of diabetes. Although, naturally a classifier was constructed in both cases whose accuracy was then considered. 
 
 ## PCA 
-First, PCA was applied to all 21 features on the full set of data, in which it was found that the first 3 principal components accounted for 93% of the overall variance, accoutning for 52%, 21%, and 20% of the variance respectively. The first three components were then further analyzed to determine which features contributed most to these components. Below are the full distribution of coefficients for each principal component based on the original 21 features.
+First, PCA was applied to all 21 features on the full set of data, in which it was found that the first 3 principal components accounted for 93% of the overall variance, accounting for 52%, 21%, and 20% of the variance respectively. The first three components were then further analyzed to determine which features contributed most to these components. Below are the full distribution of coefficients for each principal component based on the original 21 features.
 
 ```{css, echo=FALSE}
 .center {
@@ -151,10 +152,24 @@ Next, for each principal component, the largest positive and largest negative co
   <figcaption> Highest Relative Influence Factors for PC3 </figcaption>
 </figure>
 
-From the above plots, it can be seen that the for PC1, the highest contributing features were Education (+), Income (+), Physical Activity (+), Mental Health (-), and Physical Health (-). For PC2, they were Age (+), BMI (+), General Health (+), High Blood Pressure (+), Physical Health (+), and Mental Health (-). For PC3, they were Age (+), Income (+), Physical Health (+), BMI (-), and Mental Health (-). In terms of the magnitude of the coefficients, we find that the largest influence comes from BMI (+/-), Mental Health (-) and Physical Health (+/-). 
+From the above plots, it can be seen that the for PC1, the highest contributing features were Education (+), Income (+), Physical Activity (+), Mental Health (-), and Physical Health (-). For PC2, they were Age (+), BMI (+), General Health (+), High Blood Pressure (+), Physical Health (+), and Mental Health (-). For PC3, they were Age (+), Income (+), Physical Health (+), BMI (-), and Mental Health (-). In terms of the magnitude of the coefficients, we find that the largest influence comes from BMI (+/-), Mental Health (-) and Physical Health (+/-). This information is summarized below (note that the +/-) signs do not refer to positive or negative indicators of diabetes status, but rather solely the sign of the coefficients of the principal component factors. 
+
+```{r table1, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+tabl <- "
+| PC1                  | PC2                     | PC3
+|:--------------------:|:-----------------------:|:----------------------:|
+| Education (+)        | Age (+)                 | Age (+)                |
+| Income (+)           | BMI (+)                 | Income (+)             | 
+| Physical Activity (+)| General Health (+)      |   Physical Health (+)  |  
+| Mental Health (-)    | High Blood Pressure (+) |    BMI (-)             |  
+| Physical Health (-)  | Physical Health (+)     |  Mental Health (-)     |  
+|                      | Mental Health (-)       |                        |  
+"
+cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
+```
 
 ## PCA - GLM Classifier 
-After determining the features contributing the largest variance, a GLM classifier was fit to the first 3 principal components to see if these were sufficient to reproduce the diabetes status. The data was split randomly into a 75/25% training/test split. 
+After determining the features contributing the largest variance, a GLM classifier was fit to the first 3 principal components to see if these were sufficient to reproduce the diabetes status. The data was split randomly into a 75/25% training/test split. In the resulting GLM model, it was found that each of the 3 PC compenents were highly significant.
 
 <figure>
   <img src="./figures/GLM-PCA_ROC.png" alt="CAPTION" class = "center" 
@@ -162,6 +177,7 @@ After determining the features contributing the largest variance, a GLM classifi
             />
   <figcaption> ROC curve for binary GBM </figcaption>
 </figure>
+It was found that the area under the ROC curve was 0.713. 
 
 <figure>
   <img src="./figures/GLM-PCA_confusion.png" alt="CAPTION" class = "center" 
@@ -170,10 +186,11 @@ After determining the features contributing the largest variance, a GLM classifi
   <figcaption> Summary of statistics for binary GBM </figcaption>
 </figure>
 
-It was found that the area under the ROC curve was 0.713. 
+It was found that a threshold of slightly below 0.5 offered a balance between key statistics. 
+
 
 ## GBM Classifier 
-From the PCA, we determined that the above features contributed to the majority of the variance of the dataset. We wanted to further evaluate the potential importance of these features by using the R package GBM used to fit an adaboost classifier to the binary diabetes data. The data was split randomly into a 75%/25% training/test split. The top 6 highest influence features are reported below: 
+From the PCA, we determined that the above features contributed to the majority of the variance of the dataset. We wanted to further evaluate the potential importance of these features by using the R package GBM used to fit an adaboost classifier to the binary diabetes data. The data was split randomly into a 75%/25% training/test split. The top 6 highest influence features are reported below:
 
 <figure>
   <img src="./figures/GBM_Rel_Influence.png" alt="CAPTION" class = "center" 
@@ -182,12 +199,15 @@ From the PCA, we determined that the above features contributed to the majority 
   <figcaption> Highest Relative Influence for GBM </figcaption>
 </figure>
 
+Here it can be seen that the most important features for the GBM model were General Health, High BP, BMI, Age, and High Cholesterol. Repeated randomizations of the train/test data repeatedly found these features to be the highest influence. 
+
 <figure>
   <img src="./figures/GBM_ROC.png" alt="CAPTION" class = "center" 
             width="600" 
             />
   <figcaption> ROC curve for binary GBM </figcaption>
 </figure>
+In this instance it was found that the area under the ROC curve was 0.8255. Repeated randomizations of the training/test split found similar ROC curves with no major deviations, likely due to there being a large amount of samples. 
 
 <figure>
   <img src="./figures/GBM_confusion.png" alt="CAPTION" class = "center" 
@@ -196,15 +216,31 @@ From the PCA, we determined that the above features contributed to the majority 
   <figcaption> Summary of statistics for binary GBM </figcaption>
 </figure>
 
-In this instance it was found that the area under the ROC curve was 0.8255. 
+It can be seen a threshold slightly above 0.5 seems to provide a balance of different measurements such as having high accuracy, low false negative/positives, etc. 
 
 # Discussion 
 
+First, PCA was used to reduce the dimensions of the 21 feature dataset. It was found that just the first 3 components together accounted for 93% of the overall variance of the dataset. To further assess the quality of this dimensionality reduction, a logistic regression model was fit to predict the binary diabetes status {0,1} of patients. In this GLM model, the area under the ROC curve was 0.713 with an overall accuracy of around 70% on the test data and statistically significant coefficients for all 3 PC compenents. Overall this was a decent fit, suggesting the dimensionality reduction retained much of the key information contained in the data. The three components were then further analyzed to see that the key positive and negative contributing features were mental health, BMI, Physical Health, Age and Income. While this makes sense for diabetes status, we then further looked to validate the relationship between these features by fitting a GBM model. In this case, it was found that the area under the ROC curve was 0.8255 with a higher overall accuracy, suggesting the GBM model fit over all 21 features offered better performance as a classifier. In this case, it was found that the highest influencing features were General Health, High BP, BMI, Age, and High Cholesterol. A summary of the features is presented below:
 
+```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+tabl <- "
+| PCA/GLM (Highest Variance Features)      | GBM (Highest Influence Features)      
+|:-------------:|:---------------------:|
+| Mental Health | General Health        |
+| BMI           |   High Blood Pressure |  
+|Physical Health|     BMI               |  
+| Age           |     Age               |  
+| Income        | High Cholesterol      |  
+
+"
+cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
+```
+
+Interestingly, the two methods seem to agree on BMI and Age, whereas in the PCA model it seemed to suggest that mental health, physical health, and income attributed significantly to the inherent variance in the data. However, it didn't necessarily mean that these features are the most important for classification of diabetes status. Thus, it can be seen that features that accounted for less variance in the data actually mattered more according to the GBM model, such as General Health status, and whether or not the patient had High BP and High Cholesterol, all of which makes sense from a health perspective and is not necessarily contradictory. It was interesting, however, to note that both Physical Health and Mental Health played no role in the GBM classifier, whereas Income played a minor role in the GBM classifier. Overall, both classifiers were evaluated to have similar performance in classifying the binary diabetes status on test data. However, the GBM model did see clear improvements over most metrics, as well as total area under the ROC curves, suggesting that some features such as General Health, High BP and Cholesterol, despite varying less significantly than others, were still important in predicting diabetes status in patients. 
 
 
 ## Future Direction 
-
+The above methods were applied to the binary dataset and were attempted on the ternary diabetes labeling separating out prediabetic patients. In this case, the classifiers performed poorly, likely due to the heavy imbalance within the ternary dataset, as there were significantly fewer patients of the prediabetes status as compared to both healthy and diabetic patients. Some directions of future work could be to attempt to augment the data to further balance the classes, and compare whether the same predicting features would be found when the prediabetes is separated out as its own label. In the future, although the models were seemingly robust to repeated sampling of the training/test splits offered likely due to the significant number of patients in the dataset, K-fold validation should be used to further assess the quality and accuracy of the models for actual classification use. 
 
 # Appendix
 Derived .csv files containing the classifier predictions are saved in the generated derived_data directory. This will be removed with running the make clean command. 
