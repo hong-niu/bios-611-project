@@ -3,7 +3,7 @@ BIOS-611-Project-Final
 
 # Introduction: 
 
-For my project, I will be looking at a diabetes health indicators dataset. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status, or a diabetes status in {0, 1, 2} signifying no diabetes, prediabetic, or has diabetes. I'm interested in analyzing this relationship to try to identify any potential relationships between the 21 patient attributes and diabetes status. 
+For my project, I will be looking at a diabetes health indicators dataset. This dataset contains 21 numeric features (some binary) such as whether or not patients have high blood pressure or high cholesterol, BMI, smoking status, etc. For each patient, they are either given a binary diabetes status {0, 1} signifying no diabetes, or prediabetic/diabetes. I'm interested in analyzing this dataset to try to identify any potential relationships between the 21 patient attributes and diabetes status. 
 
 
 # Instructions:
@@ -21,7 +21,7 @@ Then the docker container can be built with:
 
 - docker build . -t 611-proj   
 
-Then Rstudio can be invoked (while in the bios-611-project directory) with 
+Depending on the system, this step may take up to an hour for updating the packages. Then Rstudio can be invoked (while in the bios-611-project directory) with 
 
 - docker run -v "$(pwd)":/home/rstudio/work -e PASSWORD=55 -p 8787:8787 -it 611-proj
 
@@ -32,7 +32,7 @@ In any browser, enter:
 with username: rstudio and password: 55 (or whatever password one chooses to set).
 
 # Building the Final Report:
-Due to Latex issues with the M1 Mac docker image, the final report will be presented as an HTML document. To build the html version, one may call: 
+Due to Latex issues with the M1 Mac docker image, the final report will be presented as an HTML document. To build the html version, one may call in the terminal: 
 
 - make BIOS611_Report_Final_html.html
 
@@ -40,7 +40,9 @@ This should run out of the box, run the appropriate scripts, and generate the fi
 
 - make clean
 
-# Future Work [Issues with Latex]
+----------
+
+# Future Work [Issues with Latex - Outdated Midterm Instructions]
 In the future, a Latex version of the report will be provided. The following instructions are from the midterm for the course, and has been outdated. 
 
 Finally, in order to be able to make the final writeup as a tex file to PDF, tinytex must be manually installed in Rstudio by going to the console and entering: 

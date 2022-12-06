@@ -64,6 +64,8 @@ derived_data/diabetes_binary_GBM_prediction.csv: \
 		Rscript scripts/GBM_diabetes_binary.R
 
 
+### Phony targets for running each component/testing 
+
 # Perform the GBM for testing purposes 
 GBM: derived_data/diabetes_binary_GBM_prediction.csv
 
@@ -73,11 +75,10 @@ PCA: derived_data/diabetes_binary_PCA-GLM_prediction.csv
 # Run all steps in the Makefile for testing purposes 
 all: derived_data/diabetes_binary_GBM_prediction.csv \
 		derived_data/diabetes_binary_PCA-GLM_prediction.csv
-		
-# Generate final report 
-#Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
-	#pdflatex Writeup-Midterm.tex
+###		
 
+
+# Build final report 
 BIOS611_Report_Final_html.html: figures/PC1_comp_analysis.png figures/GBM_ROC.png BIOS611_Report_Final_html.Rmd 
 	Rscript --no-restore --no-save -e  "rmarkdown::render('BIOS611_Report_Final_html.Rmd', output_format='html_document')"
 
@@ -85,6 +86,10 @@ BIOS611_Report_Final_html.html: figures/PC1_comp_analysis.png figures/GBM_ROC.pn
 
 ### Old attempts at building report - leave in for now 
 
+
+# Generate final report 
+#Writeup-Midterm.pdf: figures/PC1_comp_analysis.png WriteUp-Midterm.tex
+	#pdflatex Writeup-Midterm.tex
 
 #Writeup-Rmd.pdf: figures/PC1_comp_analysis.png WriteUp-rmd.Rmd
 #	Rscript --no-restore --no-save -e  "rmarkdown::render('Writeup-rmd.Rmd', output_format='pdf_document')"

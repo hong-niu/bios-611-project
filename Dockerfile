@@ -1,6 +1,3 @@
-# FROM rocker/r-ver:4.2.1
-# other Docker image that didn't work very well 
-
 FROM amoselb/rstudio-m1
 
 
